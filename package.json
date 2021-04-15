@@ -16,5 +16,7 @@
     "prettier": "2.2.1",
     "eslint-config-prettier": "^8.2.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "rxjs": "^6.6.7"
+  }
 }

@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-irregular-whitespace */
 //                   +-------------------------+
 //                   ¦ 34 ¦ 21 ¦ 32 ¦ 41 ¦ 25  ¦
@@ -22,4 +23,15 @@
 // class solver/jumper
 
 // json > matrix > map > new field >
-const Matrix = require('./classes/Matrix');
+const utils = require('./utils');
+const EventEmitter = require('events');
+const Board = require('./classes/Board');
+const Game = require('./classes/Game');
+const Solver = require('./classes/Solver');
+
+const localEvents = new EventEmitter();
+
+utils.loadGameData((boardData) => localEvents.emit('fileLoaded', boardData));
+
+localEvents.on('fileLoaded', (boardData) => Game.init(new Board(boardData)));
+localEvents.on('gameInitialized', () => Game.solve(new Solver()));
