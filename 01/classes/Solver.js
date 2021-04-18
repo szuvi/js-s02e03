@@ -10,6 +10,10 @@ module.exports = class Solver {
     }
     this.board = board;
     this.initialPosition = initialPosition;
+    this.initialPositionReadable = [
+      initialPosition[0] + 1,
+      initialPosition[1] + 1,
+    ];
     this.currentField = null;
     this.isWinner = false;
 
@@ -24,12 +28,21 @@ module.exports = class Solver {
 
   solve$() {
     return new Observable((subscriber) => {
+      this.streamInitialResponese(subscriber);
       while (!this.isWinner) {
         this.setNextField();
         this.updateWinnerStatus();
-        this.generateResponse(subscriber);
+        this.streamResponse(subscriber);
       }
     });
+  }
+
+  streamInitialResponese(subscriber) {
+    const initialField = this.board.getField(this.initialPosition);
+    subscriber.next('Solver starts the teasure hunt!');
+    subscriber.next(
+      `The journey starts at ${this.initialPositionReadable} where Solver finds first hint: ${initialField.hintReadable}.`
+    );
   }
 
   setNextField() {
@@ -46,25 +59,27 @@ module.exports = class Solver {
     this.isWinner = currentX === hintX && currentY === hintY;
   }
 
-  generateResponse(subscriber) {
+  streamResponse(subscriber) {
     this.streamGenericResponse(subscriber);
     this.streamHintResponse(subscriber);
     if (this.isWinner) {
-      subscriber.complete('Treasure hunt is over!');
+      subscriber.complete();
     }
   }
 
   streamGenericResponse(subscriber) {
     subscriber.next(
-      `Solver jumped to field ${this.currentField.position} and found a hint.`,
+      `Solver jumps to field ${this.currentField.positionReadable} and finds another hint.`
     );
   }
 
   streamHintResponse(subscriber) {
     subscriber.next(
-      `The hint says the next field is ${this.currentField.hint}. ${
-        this.isWinner ? "That's my field!" : 'Solver went on.'
-      }`,
+      `The hint says the next field is at ${this.currentField.hintReadable}. ${
+        this.isWinner
+          ? "That's my field! Solver grabs a shovel and starts digging..."
+          : 'Solver goes on.'
+      }`
     );
   }
 };

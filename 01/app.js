@@ -1,4 +1,3 @@
-/* eslint-disable no-irregular-whitespace */
 //                   +-------------------------+
 //                   ¦ 34 ¦ 21 ¦ 32 ¦ 41 ¦ 25  ¦
 //                   +----+----+----+----+-----¦
@@ -22,13 +21,12 @@
 // class solver/jumper
 
 // json > matrix > map > new field >
+
 const utils = require('./utils');
-const Board = require('./classes/Board');
-const Solver = require('./classes/Solver');
+const Game = require('./classes/Game');
 
-utils.loadGameData$('./boardInput.json').pipe();
+const inputPath = './boardInput.json';
 
-//  loadGameData& > add pipe > map to new Board > create new Solver and subscribe to it's solve$ method
-
-// localEvents.on('fileLoaded', (boardData) => Game.init(new Board(boardData)));
-// localEvents.on('gameInitialized', () => Game.solve(new Solver()));
+const myGame = new Game();
+myGame.init(inputPath);
+myGame.start(utils.logger);
