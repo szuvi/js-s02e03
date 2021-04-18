@@ -4,11 +4,11 @@ const Board = require('./Board');
 const Solver = require('./Solver');
 
 module.exports = class Game {
-  init(inputPath) {
+  constructor(inputPath) {
     this.gameResultsSubscription$ = utils.loadGameData$(inputPath).pipe(
       map((fileData) => new Board(fileData)),
       map((board) => new Solver(board, [0, 0])),
-      concatMap((solver) => solver.solve$()),
+      concatMap((solver) => solver.solve$())
     );
   }
 

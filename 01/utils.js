@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* eslint-disable no-console */
 const fs = require('fs');
 const { Observable } = require('rxjs');
@@ -14,11 +15,19 @@ function loadGameData$(filePath) {
   });
 }
 
-function logger(input) {
+function getLoggingObserver() {
+  return {
+    next: log,
+    error: log,
+  };
+}
+
+function log(input) {
   if (typeof input === 'object') {
     console.table(input);
   } else {
     console.log(input);
   }
 }
-module.exports = { loadGameData$, logger };
+
+module.exports = { loadGameData$, getLoggingObserver };

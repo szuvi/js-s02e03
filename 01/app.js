@@ -16,17 +16,10 @@
 // (The first three clues are 11, 34, 42). The treasure is a cell whose value is the same as its coordinates.
 // Your program should output the cells it visits during its search, and a message indicating where you found the treasure.
 
-// class board
-// class field?
-// class solver/jumper
-
-// json > matrix > map > new field >
-
 const utils = require('./utils');
 const Game = require('./classes/Game');
 
 const inputPath = './boardInput.json';
 
-const myGame = new Game();
-myGame.init(inputPath);
-myGame.start(utils.logger);
+const myGame = new Game(inputPath);
+myGame.start(utils.getLoggingObserver());
