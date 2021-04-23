@@ -7,6 +7,6 @@
 
 // ChessBoard class
 // checcPiece parent class (add white and black!)
-// how long should the program run? ask Karol
+
 // chessPieces extending paren class (movements defined)
 //
