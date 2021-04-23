@@ -6,7 +6,6 @@ const Knight = require('./Knight');
 
 const SingletonPieceFactory = (function SingletonIIFE() {
   let instance = null;
-
   class PieceFactory {
     constructor() {
       this.pieces = {
@@ -20,6 +19,18 @@ const SingletonPieceFactory = (function SingletonIIFE() {
 
     getPiece(pieceName, color) {
       return this.pieces[pieceName](color); // TODO verification
+    }
+
+    getRandomPiece() {
+      const randomIndex = Math.floor(Math.random() * PieceFactory.names.length);
+      const randomName = PieceFactory.names[randomIndex];
+      const randomColor =
+        Math.floor(Math.random() * 2) >= 1 ? 'white' : 'black';
+      return this.getPiece(randomName, randomColor);
+    }
+
+    static get names() {
+      return ['king', 'queen', 'rook', 'knight', 'bishop'];
     }
   }
 

@@ -5,8 +5,17 @@
 // If so Give that pieces position and quit program.
 // FACTORY (with class hierarhy) + SINGLETON pattern
 
-// ChessBoard class
-// checcPiece parent class (add white and black!)
+const Game = require('./classes/Game');
+const ChessBoard = require('./classes/ChessBoard');
+const pieceFacory = require('./classes/ChessPieces/PieceFactory');
+const capturesDetector = require('./utils/CapturesDetector');
 
-// chessPieces extending paren class (movements defined)
-//
+const myPieceFactory = pieceFacory.getInstance();
+
+const myGame = new Game(myPieceFactory, ChessBoard, capturesDetector);
+
+for (let i = 0; i < 10; i += 1) {
+  myGame.placeRandom();
+}
+myGame.board.display();
+myGame.reportCaptures();

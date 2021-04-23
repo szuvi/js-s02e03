@@ -22,7 +22,7 @@ const CapturesDetector = (function detectorModuleIIFE() {
     const captures = captureGetters.map((captureFunction) =>
       captureFunction(piece)
     );
-    return captures;
+    return captures.flat();
   }
 
   function getCapturesFunctions({ type: moveType }) {
@@ -33,17 +33,17 @@ const CapturesDetector = (function detectorModuleIIFE() {
   }
 
   function getLineCaptures(piece) {
-    const modifiers = moves.lineModifiers(piece.position);
+    const modifiers = moves.lineModifiers;
     return getCapturesByModifiers(modifiers, piece);
   }
 
   function getDiagonalCaptures(piece) {
-    const modifiers = moves.diagonalModifiers(piece.position);
+    const modifiers = moves.diagonalModifiers;
     return getCapturesByModifiers(modifiers, piece);
   }
 
   function getKnightCaptures(piece) {
-    const modifiers = moves.knightModifiers(piece.position);
+    const modifiers = moves.knightModifiers;
     return getCapturesByModifiers(modifiers, piece);
   }
 
@@ -62,7 +62,7 @@ const CapturesDetector = (function detectorModuleIIFE() {
 
   function getLimitedSingleCapture(piece, directionMod) {
     const currPosition = directionMod(piece.position);
-    if (isInBounds(currPosition)) {
+    if (isInBounds(currPosition) && board.isFieldOccupied(currPosition)) {
       return getCapture(currPosition, piece);
     }
     return null;
@@ -72,7 +72,7 @@ const CapturesDetector = (function detectorModuleIIFE() {
     for (
       let currPosition = directionMod(piece.position);
       isInBounds(currPosition);
-      directionMod(currPosition)
+      currPosition = directionMod(currPosition)
     ) {
       if (board.isFieldOccupied(currPosition)) {
         return getCapture(currPosition, piece);

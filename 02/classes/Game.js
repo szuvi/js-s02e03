@@ -6,22 +6,41 @@ class Game {
     this.piecesInPlay = [];
   }
 
-  placePiece(name, color, position) {
+  placePieceManually(name, color, position) {
     const piece = this.pieceFacory.getPiece(name, color);
-    try {
-      this.board.placePiece(position, piece);
-      piece.position(position);
-      this.piecesInPlay.push(piece);
-    } catch (e) {
-      console.warn(e.message); // TODO possibly change error output
+    this.placePiece(piece, position);
+  }
+
+  placeRandom() {
+    const randomPiece = this.pieceFacory.getRandomPiece();
+    if (this.isPieceInPlay(randomPiece)) {
+      this.placeRandom();
+    } else {
+      const randomPosition = this.board.getRandomPosition();
+      this.placePiece(randomPiece, randomPosition);
     }
   }
 
-  reportCaptures() {
-    const report = this.piecesInPlay.map((piece) =>
-      this.capturesDetector.triggerPossibleCaptures(piece)
+  placePiece(piece, position) {
+    this.board.placePiece(position, piece);
+    // eslint-disable-next-line no-param-reassign
+    piece.position = position;
+    this.piecesInPlay.push(piece);
+  }
+
+  isPieceInPlay(targetPiece) {
+    return this.piecesInPlay.some(
+      (piece) =>
+        piece.name === targetPiece.name && piece.color === targetPiece.color
     );
-    report.flat().forEach((line) => console.log(line)); // TODO rxjs or events
+  }
+
+  reportCaptures() {
+    const detectorInstance = this.capturesDetector(this.board);
+    const report = this.piecesInPlay.map((piece) =>
+      detectorInstance.triggerPossibleCaptures(piece)
+    );
+    report.flat().forEach((line) => console.log(line)); // TODO possibly change way of handling output
   }
 }
 

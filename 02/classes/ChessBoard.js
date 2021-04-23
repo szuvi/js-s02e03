@@ -23,10 +23,32 @@ class ChessBoard {
   }
 
   getPiece([row, column]) {
-    if (this.isFieldOccupied[(row, column)]) {
+    if (this.isFieldOccupied([row, column])) {
       return this.board[row][column];
     }
     return null;
+  }
+
+  getRandomPosition() {
+    const randomRow = Math.floor(Math.random() * 8);
+    const randomColumn = Math.floor(Math.random() * 8);
+    if (this.isFieldOccupied([randomRow, randomColumn])) {
+      return this.getRandomPosition();
+    }
+    return [randomRow, randomColumn];
+  }
+
+  display(outputCallback = console.log) {
+    this.board.forEach((row) => outputCallback(this.displayRow(row)));
+  }
+
+  // not sure where to put this
+  // eslint-disable-next-line class-methods-use-this
+  displayRow(row) {
+    return row.reduce((output, field) => {
+      if (field === null) return `${output}  X`;
+      return `${output} ${field.notation}`;
+    }, '');
   }
 }
 
@@ -38,6 +60,7 @@ function createEmptyBoard() {
       board[row][column] = null;
     }
   }
+  return board;
 }
 
 module.exports = ChessBoard;
